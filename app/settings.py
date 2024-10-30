@@ -21,7 +21,9 @@ class Config:
     os.makedirs(LOG_DIR, exist_ok=True)
 
     MODELS_PATH = os.path.join(os.path.dirname(__file__),'..','models')
-    os.makedirs(MODELS_PATH, exist_ok=True)
+
+    # CACHE_DIR = os.path.join(os.path.dirname(__file__),'..','models')
+    # os.makedirs(CACHE_DIR, exist_ok=True)
     # MODELS_PATH = '/models'
 
     MODEL_NAME = "sentence-transformers/all-mpnet-base-v2"

@@ -13,12 +13,13 @@ from langchain_community.llms import HuggingFacePipeline
 from langchain.callbacks.manager import CallbackManager
 from transformers import GenerationConfig, pipeline
 import torch
-
+import os
 from app.settings import Config
 
 conf = Config()
 
 
+logger = logging.getLogger(__name__)
 
 MODELS_PATH = conf.MODELS_PATH
 # print(f"MODELS PATH: {MODELS_PATH}")
@@ -28,6 +29,11 @@ MAX_NEW_TOKENS = 2048
 N_BATCH= 512
 N_GPU_LAYERS = 1
 
+# CACHE_DIR = conf.CACHE_DIR #"./models/"
+# os.environ['HF_HOME'] = CACHE_DIR
+
+CACHE_DIR = "/tmp/huggingface_cache"
+os.makedirs(CACHE_DIR, exist_ok=True)
 
 def load_quantized_model_gguf_ggml(model_id, model_basename, device_type, logging):
 
@@ -83,11 +89,11 @@ def load_full_model(model_id, model_basename, device_type, logging):
 
     if device_type.lower() in ["mps", "cpu"]:
         logging.info("Using LlamaTokenizer")
-        tokenizer = LlamaTokenizer.from_pretrained(model_id, cache_dir="./models/")
-        model = LlamaForCausalLM.from_pretrained(model_id, cache_dir="./models/")
+        tokenizer = LlamaTokenizer.from_pretrained(model_id, cache_dir=CACHE_DIR)
+        model = LlamaForCausalLM.from_pretrained(model_id, cache_dir=CACHE_DIR)
     else:
         logging.info("Using AutoModelForCausalLM for full models")
-        tokenizer = AutoTokenizer.from_pretrained(model_id, cache_dir="./models/")
+        tokenizer = AutoTokenizer.from_pretrained(model_id, cache_dir=CACHE_DIR)
         logging.info("Tokenizer loaded")
         model = AutoModelForCausalLM.from_pretrained(
             model_id,
@@ -106,9 +112,9 @@ def load_full_model(model_id, model_basename, device_type, logging):
 
 
 
-def load_model(device_type, model_id, model_basename=None, LOGGING=logging):
-    logging.info(f"Loading Model: {model_id}, on: {device_type}")
-    logging.info("This action can take a few minutes!")
+def load_model(device_type, model_id, model_basename=None, LOGGING=logger):
+    logger.info(f"Loading Model: {model_id}, on: {device_type}")
+    logger.info("This action can take a few minutes!")
 
     if model_basename is not None:
         if ".gguf" in model_basename.lower():
@@ -140,5 +146,5 @@ def load_model(device_type, model_id, model_basename=None, LOGGING=logging):
     )
 
     local_llm = HuggingFacePipeline(pipeline=pipe)
-    logging.info("Local LLM Loaded")
+    logger.info("Local LLM Loaded")
     return local_llm

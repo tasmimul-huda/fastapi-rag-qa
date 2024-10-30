@@ -23,7 +23,7 @@ def initialize_models(openai_api_key=None,model_id=None, model_basename=None):
             embedding_model = HuggingFaceEmbeddings(model_name="sentence-transformers/all-mpnet-base-v2", 
                                                     model_kwargs={'device': 'cpu'}, 
                                                     encode_kwargs={'normalize_embeddings': False})
-            llm_model = load_model(device_type="cpu", model_id=model_id, model_basename=model_basename)
+            llm_model = load_model(device_type="cpu", model_id=model_id, model_basename=model_basename, LOGGING=logger)
             logger.info("Using Hugging Face embeddings and local LLM model.")
         
         return embedding_model, llm_model
