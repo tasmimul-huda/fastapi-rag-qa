@@ -14,14 +14,14 @@ from langchain.callbacks.manager import CallbackManager
 from transformers import GenerationConfig, pipeline
 import torch
 
-from settings import Config
+from app.settings import Config
 
 conf = Config()
 
 
 
 MODELS_PATH = conf.MODELS_PATH
-print(f"MODELS PATH: {MODELS_PATH}")
+# print(f"MODELS PATH: {MODELS_PATH}")
 
 CONTEXT_WINDOW_SIZE = 2048
 MAX_NEW_TOKENS = 2048

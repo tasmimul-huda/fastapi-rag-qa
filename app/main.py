@@ -1,11 +1,11 @@
 from fastapi import FastAPI, Body, Request, Form
 import uvicorn
 from fastapi.middleware.cors import CORSMiddleware
-from api.answer import answer_router
-from api.upload import upload_router
+from app.api.answer import answer_router
+from app.api.upload import upload_router
 
-import logging_config
-from settings import Config
+from app import logging_config
+from app.settings import Config
 
 import warnings
 warnings.filterwarnings("ignore")

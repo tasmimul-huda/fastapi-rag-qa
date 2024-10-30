@@ -9,15 +9,15 @@ import shutil
 import logging
 
 
-from data_pipeline.data_loader import DocumentLoader
-from data_pipeline.embedding_manager import split_text,initialize_embedding_model,create_and_store_embeddings
+from app.data_pipeline.data_loader import DocumentLoader
+from app.data_pipeline.embedding_manager import split_text,initialize_embedding_model,create_and_store_embeddings
 import warnings
 warnings.filterwarnings("ignore")
 
 
 logger = logging.getLogger(__name__)
 
-from settings import Config
+from app.settings import Config
 conf = Config()
 
 upload_router = APIRouter()

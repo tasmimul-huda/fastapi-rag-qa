@@ -2,9 +2,9 @@ import logging
 #import create_history_aware_retriever, 
 from langchain.chains import create_retrieval_chain
 from langchain.chains.combine_documents import create_stuff_documents_chain
-from rag_pipeline.prompt_utils import qa_prompt
-from rag_pipeline.chroma_client import get_chroma_client
-from settings import Config
+from app.rag_pipeline.prompt_utils import qa_prompt
+from app.rag_pipeline.chroma_client import get_chroma_client
+from app.settings import Config
 
 # from prompt_utils import qa_prompt
 # from chroma_client import get_chroma_client

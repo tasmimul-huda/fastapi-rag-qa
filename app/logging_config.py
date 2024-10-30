@@ -1,7 +1,7 @@
 import logging
 from logging.handlers import RotatingFileHandler
 import os
-from settings import Config
+from app.settings import Config
 
 # Define whether logging should be enabled
 is_logging = True  # Set to False to disable logging

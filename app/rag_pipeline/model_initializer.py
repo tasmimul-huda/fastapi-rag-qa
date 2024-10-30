@@ -2,7 +2,7 @@ import os
 import logging
 from langchain_openai import OpenAIEmbeddings, ChatOpenAI
 from langchain_huggingface import HuggingFaceEmbeddings
-from rag_pipeline.model_loader import load_model
+from app.rag_pipeline.model_loader import load_model
 
 logger = logging.getLogger(__name__)
 

@@ -7,7 +7,7 @@ from langchain_huggingface import HuggingFaceEmbeddings
 from langchain_openai import OpenAIEmbeddings
 
 
-from settings import Config
+from app.settings import Config
 
 conf = Config()
 
