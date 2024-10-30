@@ -6,6 +6,16 @@ __pycache__/
 # C extensions
 *.so
 
+
+requirements_update.txt
+models/
+log_dir/
+vector_store/
+Data/
+Data-bkup/
+utils_doc/
+uploads/
+tests/
 # Distribution / packaging
 .Python
 build/
