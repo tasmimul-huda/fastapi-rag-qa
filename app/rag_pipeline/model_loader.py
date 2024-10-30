@@ -30,6 +30,7 @@ N_GPU_LAYERS = 1
 
 CACHE_DIR = conf.CACHE_DIR #"./models/"
 
+os.environ["HUGGINGFACEHUB_API_TOKEN"] = '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'
 
 def load_quantized_model_gguf_ggml(model_id, model_basename, device_type, logging):
 
@@ -85,11 +86,11 @@ def load_full_model(model_id, model_basename, device_type, logging):
 
     if device_type.lower() in ["mps", "cpu"]:
         logging.info("Using LlamaTokenizer")
-        tokenizer = LlamaTokenizer.from_pretrained(model_id, cache_dir=CACHE_DIR) #
-        model = LlamaForCausalLM.from_pretrained(model_id, cache_dir=CACHE_DIR) #, cache_dir=CACHE_DIR
+        tokenizer = LlamaTokenizer.from_pretrained(model_id, cache_dir=CACHE_DIR, use_auth_token=os.environ["HUGGINGFACEHUB_API_TOKEN"]) #
+        model = LlamaForCausalLM.from_pretrained(model_id, cache_dir=CACHE_DIR, use_auth_token=os.environ["HUGGINGFACEHUB_API_TOKEN"]) #, cache_dir=CACHE_DIR
     else:
         logging.info("Using AutoModelForCausalLM for full models")
-        tokenizer = AutoTokenizer.from_pretrained(model_id, cache_dir=CACHE_DIR) #, cache_dir=CACHE_DIR
+        tokenizer = AutoTokenizer.from_pretrained(model_id, cache_dir=CACHE_DIR, use_auth_token=os.environ["HUGGINGFACEHUB_API_TOKEN"]) #, cache_dir=CACHE_DIR
         logging.info("Tokenizer loaded")
         model = AutoModelForCausalLM.from_pretrained(
             model_id,
@@ -97,6 +98,7 @@ def load_full_model(model_id, model_basename, device_type, logging):
             torch_dtype=torch.float16,
             low_cpu_mem_usage=True,
             cache_dir=MODELS_PATH,
+            use_auth_token=os.environ["HUGGINGFACEHUB_API_TOKEN"]
             # trust_remote_code=True, # set these if you are using NVIDIA GPU
             # load_in_4bit=True,
             # bnb_4bit_quant_type="nf4",

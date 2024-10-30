@@ -11,6 +11,8 @@ CACHE_DIR = conf.CACHE_DIR
 
 logger = logging.getLogger(__name__)
 
+os.environ["HUGGINGFACEHUB_API_TOKEN"] = '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'
+
 def initialize_models(openai_api_key=None,model_id=None, model_basename=None):
     """
     Initializes embedding and chat model based on the OpenAI API key availability.
