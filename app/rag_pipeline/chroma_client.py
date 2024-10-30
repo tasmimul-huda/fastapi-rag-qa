@@ -6,6 +6,7 @@ logger = logging.getLogger(__name__)
 
 def get_chroma_client(collection_name, embedding_function, persist_directory):
     try:
+        logging.info(f"Setting  up chroma client")
         return Chroma(collection_name=collection_name,
                       embedding_function=embedding_function,
                       persist_directory=persist_directory)

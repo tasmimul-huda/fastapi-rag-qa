@@ -101,97 +101,34 @@ class RetrieverChain:
 
 
 
-
-
-class RetrieverChainNew:
-    def __init__(self, collection_name, embedding_function, persist_directory):
-        try:
-            self.vector_db = get_chroma_client(collection_name, embedding_function, persist_directory)
-        except Exception as e:
-            logger.error(f"Error creating RetrieverChain: {e}")
-            raise
-
-    def get_retriever(self):
-        try:
-            return self.vector_db.as_retriever(search_type="mmr", search_kwargs={"k": 3, "fetch_k": 2})
-        except Exception as e:
-            logger.error(f"Failed to get retriever: {e}")
-            raise
-
-    def retrieve_documents(self, user_input):
-        """
-        Retrieve relevant documents based on user query.
-        """
-        try:
-            retriever = self.get_retriever()
-            docs = retriever.get_relevant_documents(user_input)
-            logger.info(f"Retrieved {len(docs)} documents for query: {user_input}")
-            return docs
-        except Exception as e:
-            logger.error(f"Error retrieving documents: {e}")
-            raise
-
-    def generate_response(self, docs, llm):
-        """
-        Generate a response from the language model based on retrieved documents.
-        """
-        try:
-            question_answer_chain = create_stuff_documents_chain(llm, qa_prompt)
-            # Passing the retrieved documents to the QA chain for answer generation
-            response = question_answer_chain.invoke({"documents": docs})
-            return response['answer']
-        except Exception as e:
-            logger.error(f"Error generating response: {e}")
-            raise
-
-    def get_response(self, user_input, llm):
-        """
-        Retrieve documents and generate a response based on user query.
-        """
-        try:
-            # Step 1: Retrieve relevant documents
-            docs = self.retrieve_documents(user_input)
-            
-            # Step 2: Generate a response using retrieved documents
-            answer = self.generate_response(docs, llm)
-            
-            return answer
-        except Exception as e:
-            logger.error(f"Error getting response: {e}")
-            raise
-
-
-
-
-
-if __name__ == "__main__":
-    import os
-    from model_initializer import initialize_models
+# if __name__ == "__main__":
+#     import os
+#     from model_initializer import initialize_models
     
     
-    parent_dir = os.path.abspath(os.path.join(os.path.dirname(__file__), '..'))
+#     parent_dir = os.path.abspath(os.path.join(os.path.dirname(__file__), '..'))
 
-    openai_api_key = conf.API_KEY
+#     openai_api_key = conf.API_KEY
 
-    embedding_model, llm_model = initialize_models(openai_api_key,model_id=MODEL_ID, model_basename=MODEL_BASENAME)
+#     embedding_model, llm_model = initialize_models(openai_api_key,model_id=MODEL_ID, model_basename=MODEL_BASENAME)
 
-    print(f"embeddi_modelng: {embedding_model}")
-    print(f"llm_model: {llm_model}")
+#     print(f"embeddi_modelng: {embedding_model}")
+#     print(f"llm_model: {llm_model}")
 
-    collection_name = 'AI_assignment'
+#     collection_name = 'AI_assignment'
 
-    persist_directory = f'D:/AI Assignment/vector_store'
-    print(f"persist_directory: {persist_directory}")
-    while True:
-        print("Enter query: ")
-        user_query = input()
-        if user_query.lower() == 'exit':
-            break
+#     persist_directory = f'D:/AI Assignment/vector_store'
+#     print(f"persist_directory: {persist_directory}")
+#     while True:
+#         print("Enter query: ")
+#         user_query = input()
+#         if user_query.lower() == 'exit':
+#             break
 
-        retriever_qa = RetrieverChain(
-            collection_name=collection_name, embedding_function=embedding_model, persist_directory=persist_directory)
-        response = retriever_qa.get_response(user_input = user_query, llm= llm_model)
-        print(f"Response: {response}")
+#         retriever_qa = RetrieverChain(
+#             collection_name=collection_name, embedding_function=embedding_model, persist_directory=persist_directory)
+#         response = retriever_qa.get_response(user_input = user_query, llm= llm_model)
+#         print(f"Response: {response}")
 
 
 

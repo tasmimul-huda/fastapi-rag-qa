@@ -6,10 +6,8 @@ from app.api.upload import upload_router
 
 from app import logging_config
 from app.settings import Config
-
 import warnings
 warnings.filterwarnings("ignore")
-
 
 conf = Config
 

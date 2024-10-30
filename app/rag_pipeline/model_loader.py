@@ -22,18 +22,14 @@ conf = Config()
 logger = logging.getLogger(__name__)
 
 MODELS_PATH = conf.MODELS_PATH
-# print(f"MODELS PATH: {MODELS_PATH}")
 
 CONTEXT_WINDOW_SIZE = 2048
 MAX_NEW_TOKENS = 2048
 N_BATCH= 512
 N_GPU_LAYERS = 1
 
-# CACHE_DIR = conf.CACHE_DIR #"./models/"
-# os.environ['HF_HOME'] = CACHE_DIR
+CACHE_DIR = conf.CACHE_DIR #"./models/"
 
-CACHE_DIR = "/tmp/huggingface_cache"
-os.makedirs(CACHE_DIR, exist_ok=True)
 
 def load_quantized_model_gguf_ggml(model_id, model_basename, device_type, logging):
 
@@ -89,11 +85,11 @@ def load_full_model(model_id, model_basename, device_type, logging):
 
     if device_type.lower() in ["mps", "cpu"]:
         logging.info("Using LlamaTokenizer")
-        tokenizer = LlamaTokenizer.from_pretrained(model_id) #, cache_dir=CACHE_DIR
-        model = LlamaForCausalLM.from_pretrained(model_id) #, cache_dir=CACHE_DIR
+        tokenizer = LlamaTokenizer.from_pretrained(model_id, cache_dir=CACHE_DIR) #
+        model = LlamaForCausalLM.from_pretrained(model_id, cache_dir=CACHE_DIR) #, cache_dir=CACHE_DIR
     else:
         logging.info("Using AutoModelForCausalLM for full models")
-        tokenizer = AutoTokenizer.from_pretrained(model_id) #, cache_dir=CACHE_DIR
+        tokenizer = AutoTokenizer.from_pretrained(model_id, cache_dir=CACHE_DIR) #, cache_dir=CACHE_DIR
         logging.info("Tokenizer loaded")
         model = AutoModelForCausalLM.from_pretrained(
             model_id,

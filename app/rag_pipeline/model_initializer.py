@@ -4,6 +4,11 @@ from langchain_openai import OpenAIEmbeddings, ChatOpenAI
 from langchain_huggingface import HuggingFaceEmbeddings
 from app.rag_pipeline.model_loader import load_model
 
+from app.settings import Config
+conf = Config()
+
+CACHE_DIR = conf.CACHE_DIR
+
 logger = logging.getLogger(__name__)
 
 def initialize_models(openai_api_key=None,model_id=None, model_basename=None):
@@ -22,7 +27,9 @@ def initialize_models(openai_api_key=None,model_id=None, model_basename=None):
         else:
             embedding_model = HuggingFaceEmbeddings(model_name="sentence-transformers/all-mpnet-base-v2", 
                                                     model_kwargs={'device': 'cpu'}, 
-                                                    encode_kwargs={'normalize_embeddings': False})
+                                                    encode_kwargs={'normalize_embeddings': False},
+                                                    cache_folder = CACHE_DIR
+                                                    )
             llm_model = load_model(device_type="cpu", model_id=model_id, model_basename=model_basename, LOGGING=logger)
             logger.info("Using Hugging Face embeddings and local LLM model.")
         

@@ -117,11 +117,11 @@ class DocumentLoader():
 
 
 
-if __name__ == "__main__":
-    source_directory = os.path.join(os.path.dirname(__file__),'..','Data')
-    document_loader = DocumentLoader(source_directory)
+# if __name__ == "__main__":
+#     source_directory = os.path.join(os.path.dirname(__file__),'..','Data')
+#     document_loader = DocumentLoader(source_directory)
     
-    documents = document_loader.load_all_documents()
+#     documents = document_loader.load_all_documents()
 
 
 
