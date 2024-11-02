@@ -27,17 +27,21 @@ def initialize_models(openai_api_key=None,model_id=None, model_basename=None):
             llm_model = ChatOpenAI(api_key=openai_api_key)
             logger.info("Using OpenAI models.")
         else:
-            embedding_model = HuggingFaceEmbeddings(model_name="sentence-transformers/all-MiniLM-L6-v2", # all-mpnet-base-v2
+            embedding_model = HuggingFaceEmbeddings(model_name="sentence-transformers/all-mpnet-base-v2",
                                                     model_kwargs={'device': 'cpu'}, 
                                                     encode_kwargs={'normalize_embeddings': False},
                                                     cache_folder = CACHE_DIR
                                                     )
-            # llm_model = load_model(device_type="cpu", model_id=model_id, model_basename=model_basename, LOGGING=logger)
-            llm_model = HuggingFacePipeline.from_model_id(
-                model_id= "gpt2", #"google/flan-t5-small",
-                task="text-generation",
-            )
-
+            llm_model = load_model(device_type="cpu",
+                                    model_id=model_id, 
+                                    model_basename=model_basename,
+                                    LOGGING=logger)
+            
+            # llm_model = HuggingFacePipeline.from_model_id(
+            #     model_id= "gpt2", #"google/flan-t5-small",
+            #     task="text-generation",
+            #     cache_folder = CACHE_DIR
+            # )
             #TheBloke/Mistral-7B-v0.1-GGUF
             #HuggingFaceH4/zephyr-7b-beta
             

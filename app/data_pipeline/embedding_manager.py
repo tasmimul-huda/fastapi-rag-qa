@@ -5,6 +5,11 @@ from langchain_chroma import Chroma
 from langchain_text_splitters import RecursiveCharacterTextSplitter
 from langchain_huggingface import HuggingFaceEmbeddings
 from langchain_openai import OpenAIEmbeddings
+from langchain.docstore.document import Document
+
+import re
+from nltk.corpus import stopwords
+from nltk.stem import PorterStemmer, WordNetLemmatizer
 
 
 from app.settings import Config
@@ -15,7 +20,8 @@ OPENAI_API_KEY = conf.API_KEY
 PERSIST_DIRECTORY = conf.PERSIST_DIRECTORY
 COLLECTION_NAME = conf.COLLECTION_NAME
 
-
+stemmer = PorterStemmer()
+lemmatizer = WordNetLemmatizer()
 # Set up logging
 import logging
 
@@ -40,13 +46,50 @@ def initialize_embedding_model():
         raise
 
 
+stop_words = set(stopwords.words("english"))
+
+def remove_stop_words(text: str) -> str:
+    words = text.split()
+    filtered_text = " ".join([word for word in words if word not in stop_words])
+    return filtered_text
+
+
+
+def stem_text(text: str) -> str:
+    words = text.split()
+    stemmed_text = " ".join([stemmer.stem(word) for word in words])
+    return stemmed_text
+
+def lemmatize_text(text: str) -> str:
+    words = text.split()
+    lemmatized_text = " ".join([lemmatizer.lemmatize(word) for word in words])
+    return lemmatized_text
+
+
+def preprocess_text(text: str) -> str:
+    """Clean and preprocess text data."""
+    # text = text.lower()  # Convert to lowercase
+    text = re.sub(r"[^a-zA-Z0-9\s]", "", text)  # Remove special characters
+    text = re.sub(r"\s+", " ", text)  # Normalize whitespace
+    text = remove_stop_words(text)  # Remove stopwords
+    text = lemmatize_text(text)  # Lemmatize text
+    return text.strip()
+
+
 
 def split_text(documents: List[str]) -> List[str]:
-    """Split documents into smaller chunks."""
+    """Preprocess documents and split them into smaller chunks."""
     try:
-        logger.info(f"Splitting documents into chunks...")
+        logger.info("Preprocessing and splitting documents into chunks...")
+        
+        # Preprocess each document's text
+        preprocessed_documents = [
+            Document(page_content=preprocess_text(doc.page_content), metadata=doc.metadata)
+            for doc in documents
+        ]
+
         text_splitter = RecursiveCharacterTextSplitter(chunk_size=conf.CHUNK_SIZE, chunk_overlap=conf.CHUNK_OVERLAP)
-        chunks = text_splitter.split_documents(documents)
+        chunks = text_splitter.split_documents(preprocessed_documents)
         logger.info(f"Document splitting completed.")
         return chunks
     except Exception as e:
