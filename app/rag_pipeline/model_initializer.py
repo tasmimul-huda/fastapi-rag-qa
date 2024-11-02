@@ -3,7 +3,7 @@ import logging
 from langchain_openai import OpenAIEmbeddings, ChatOpenAI
 from langchain_huggingface import HuggingFaceEmbeddings
 from app.rag_pipeline.model_loader import load_model
-
+from langchain_huggingface import HuggingFacePipeline
 from app.settings import Config
 conf = Config()
 
@@ -32,7 +32,14 @@ def initialize_models(openai_api_key=None,model_id=None, model_basename=None):
                                                     encode_kwargs={'normalize_embeddings': False},
                                                     cache_folder = CACHE_DIR
                                                     )
-            llm_model = load_model(device_type="cpu", model_id=model_id, model_basename=model_basename, LOGGING=logger)
+            # llm_model = load_model(device_type="cpu", model_id=model_id, model_basename=model_basename, LOGGING=logger)
+            llm_model = HuggingFacePipeline.from_model_id(
+                model_id="HuggingFaceH4/zephyr-7b-beta",
+                task="text-generation",
+            )
+
+            #TheBloke/Mistral-7B-v0.1-GGUF
+            
             logger.info("Using Hugging Face embeddings and local LLM model.")
         
         return embedding_model, llm_model
