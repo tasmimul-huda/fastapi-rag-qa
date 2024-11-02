@@ -10,7 +10,8 @@ from langchain.docstore.document import Document
 import re
 from nltk.corpus import stopwords
 from nltk.stem import PorterStemmer, WordNetLemmatizer
-
+import nltk
+# nltk.download('stopwords')
 
 from app.settings import Config
 
@@ -20,6 +21,7 @@ OPENAI_API_KEY = conf.API_KEY
 PERSIST_DIRECTORY = conf.PERSIST_DIRECTORY
 COLLECTION_NAME = conf.COLLECTION_NAME
 
+# stop_words = set(stopwords.words("english"))
 stemmer = PorterStemmer()
 lemmatizer = WordNetLemmatizer()
 # Set up logging
@@ -46,12 +48,12 @@ def initialize_embedding_model():
         raise
 
 
-stop_words = set(stopwords.words("english"))
 
-def remove_stop_words(text: str) -> str:
-    words = text.split()
-    filtered_text = " ".join([word for word in words if word not in stop_words])
-    return filtered_text
+
+# def remove_stop_words(text: str) -> str:
+#     words = text.split()
+#     filtered_text = " ".join([word for word in words if word not in stop_words])
+#     return filtered_text
 
 
 
@@ -71,8 +73,8 @@ def preprocess_text(text: str) -> str:
     # text = text.lower()  # Convert to lowercase
     text = re.sub(r"[^a-zA-Z0-9\s]", "", text)  # Remove special characters
     text = re.sub(r"\s+", " ", text)  # Normalize whitespace
-    text = remove_stop_words(text)  # Remove stopwords
-    text = lemmatize_text(text)  # Lemmatize text
+    # text = remove_stop_words(text)  # Remove stopwords
+    # text = lemmatize_text(text)  # Lemmatize text
     return text.strip()
 
 
