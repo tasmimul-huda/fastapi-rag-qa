@@ -1,4 +1,4 @@
-# AI Assignment: Retrieval-Augmented Question-Answering System with FastAPI and LangChain
+# Retrieval-Augmented Question-Answering System with FastAPI and LangChain
 
 ## **Overview**
 This project implements a question-answering service that utilizes Retrieval-Augmented Generation (RAG). By leveraging FastAPI and LangChain, the application answers user questions based on a pre-indexed set of documents. The RAG pipeline first retrieves relevant information from indexed document chunks and then generates an answer using a language model conditioned on the retrieved data. The design prioritizes efficiency, error handling, and modularity.
